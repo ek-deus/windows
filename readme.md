@@ -18,7 +18,6 @@ Windows inside a Docker container.
 
 ## Features ✨
 
- - Multi-language
  - ISO downloader
  - KVM acceleration
  - Web-based viewer
@@ -37,7 +36,7 @@ services:
     image: dockurr/windows
     container_name: windows
     environment:
-      VERSION: "win11"
+      VERSION: "11"
     devices:
       - /dev/kvm
     cap_add:
@@ -58,8 +57,18 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
 Via Kubernetes:
 
 ```shell
-kubectl apply -f kubernetes.yml
+kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/master/kubernetes.yml
 ```
+
+## Compatibility ⚙️
+
+| **Product**  | **Platform**   | |
+|---|---|---|
+| Docker Engine | Linux| ✅ |
+| Docker Desktop | Linux | ❌ |
+| Docker Desktop | macOS | ❌ |
+| Docker Desktop | Windows 11 | ✅ |
+| Docker Desktop | Windows 10 | ❌ |
 
 ## FAQ 💬
 
@@ -77,65 +86,40 @@ kubectl apply -f kubernetes.yml
 
 ### How do I select the Windows version?
 
-  By default, Windows 11 will be installed. But you can add the `VERSION` environment variable to your compose file, in order to specify an alternative Windows version to be downloaded:
+  By default, Windows 11 Pro will be installed. But you can add the `VERSION` environment variable to your compose file, in order to specify an alternative Windows version to be downloaded:
 
   ```yaml
   environment:
-    VERSION: "win11"
+    VERSION: "11"
   ```
 
   Select from the values below:
   
-  | **Value** | **Version**              | **Size** |
+  | **Value** | **Version**           | **Size** |
   |---|---|---|
-  | `win11`   | Windows 11 Pro           | 6.4 GB   |
-  | `win11e`  | Windows 11 Enterprise    | 5.8 GB   |
-  | `win10`   | Windows 10 Pro           | 5.7 GB   |
-  | `ltsc10`  | Windows 10 LTSC          | 4.6 GB   |
-  | `win10e`  | Windows 10 Enterprise    | 5.2 GB   |
-  ||||  
-  | `win8`    | Windows 8.1 Pro          | 4.0 GB   |
-  | `win8e`   | Windows 8.1 Enterprise   | 3.7 GB   |
-  | `win7`    | Windows 7 Enterprise     | 3.0 GB   |
-  | `vista`   | Windows Vista Enterprise | 3.0 GB   |
-  | `winxp`   | Windows XP Professional  | 0.6 GB   |
+  | `11`   | Windows 11 Pro           | 5.4 GB   |
+  | `11l`  | Windows 11 LTSC          | 4.2 GB   |
+  | `11e`  | Windows 11 Enterprise    | 5.8 GB   |
   ||||
-  | `2022`    | Windows Server 2022      | 4.7 GB   |
-  | `2019`    | Windows Server 2019      | 5.3 GB   |
-  | `2016`    | Windows Server 2016      | 6.5 GB   |
-  | `2012`    | Windows Server 2012      | 4.3 GB   |
-  | `2008`    | Windows Server 2008      | 3.0 GB   |
+  | `10`   | Windows 10 Pro           | 5.7 GB   |
+  | `10l`  | Windows 10 LTSC          | 4.6 GB   |
+  | `10e`  | Windows 10 Enterprise    | 5.2 GB   |
   ||||
-  | `core11`  | Tiny 11 Core             | 2.1 GB   |
-  | `tiny11`  | Tiny 11                  | 3.8 GB   |
-  | `tiny10`  | Tiny 10                  | 3.6 GB   |
+  | `8e`   | Windows 8.1 Enterprise   | 3.7 GB   |
+  | `7e`   | Windows 7 Enterprise     | 3.0 GB   |
+  | `ve`   | Windows Vista Enterprise | 3.0 GB   |
+  | `xp`   | Windows XP Professional  | 0.6 GB   |
+  ||||
+  | `2025` | Windows Server 2025      | 5.0 GB   |
+  | `2022` | Windows Server 2022      | 4.7 GB   |
+  | `2019` | Windows Server 2019      | 5.3 GB   |
+  | `2016` | Windows Server 2016      | 6.5 GB   |
+  | `2012` | Windows Server 2012      | 4.3 GB   |
+  | `2008` | Windows Server 2008      | 3.0 GB   |
+  | `2003` | Windows Server 2003      | 0.6 GB   |
 
 > [!TIP]
 > To install ARM64 versions of Windows use [dockur/windows-arm](https://github.com/dockur/windows-arm/).
-
-### How do I select the Windows language?
-
-  By default, the English version of Windows will be downloaded. But you can add the `LANGUAGE` environment variable to your compose file, in order to specify an alternative language:
-
-  ```yaml
-  environment:
-    LANGUAGE: "French"
-  ```
-  
-  You can choose between: 🇦🇪 Arabic, 🇧🇬 Bulgarian, 🇨🇳 Chinese, 🇭🇷 Croatian, 🇨🇿 Czech, 🇩🇰 Danish, 🇳🇱 Dutch, 🇬🇧 English, 🇪🇪 Estionian, 🇫🇮 Finnish, 🇫🇷 French, 🇩🇪 German, 🇬🇷 Greek, 🇮🇱 Hebrew, 🇭🇺 Hungarian, 🇮🇹 Italian, 🇯🇵 Japanese, 🇰🇷 Korean, 🇱🇻 Latvian, 🇱🇹 Lithuanian, 🇳🇴 Norwegian, 🇵🇱 Polish, 🇵🇹 Portuguese, 🇷🇴 Romanian, 🇷🇺 Russian, 🇷🇸 Serbian, 🇸🇰 Slovak, 🇸🇮 Slovenian, 🇪🇸 Spanish, 🇸🇪 Swedish, 🇹🇭 Thai, 🇹🇷 Turkish and 🇺🇦 Ukrainian.
-
-### How do I select the keyboard layout?
-
-  If you want to use a keyboard layout or locale that is not the default for your selected language, you can add the `KEYBOARD` and `REGION` variables with a culture code, like this:
-
-  ```yaml
-  environment:
-    REGION: "en-US"
-    KEYBOARD: "en-US"
-  ```
-
-> [!NOTE]  
->  Changing these values will have no effect after the installation has been performed already. Use the control panel inside Windows in that case.
 
 ### How do I change the storage location?
 
@@ -162,11 +146,11 @@ kubectl apply -f kubernetes.yml
 
 ### How do I share files with the host?
 
-  Open 'File Explorer' and click on the 'Network' section, you will see a computer called `host.lan`. Double-click it and it will show a folder called `Data`, which can be binded to any folder on your host via the compose file:
+  Open 'File Explorer' and click on the 'Network' section, you will see a computer called `host.lan`. Double-click it and it will show a folder called `Data`, which can be bound to any folder on your host via the compose file:
 
   ```yaml
   volumes:
-    -  /home/user/example:/shared
+    -  /home/user/example:/data
   ```
 
   The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
@@ -237,6 +221,31 @@ kubectl apply -f kubernetes.yml
     USERNAME: "bill"
     PASSWORD: "gates"
   ```
+
+### How do I select the Windows language?
+
+  By default, the English version of Windows will be downloaded. But you can add the `LANGUAGE` environment variable to your compose file, in order to specify an alternative language:
+
+  ```yaml
+  environment:
+    LANGUAGE: "French"
+  ```
+  
+  You can choose between: 🇦🇪 Arabic, 🇧🇬 Bulgarian, 🇨🇳 Chinese, 🇭🇷 Croatian, 🇨🇿 Czech, 🇩🇰 Danish, 🇳🇱 Dutch, 🇬🇧 English, 🇪🇪 Estonian, 🇫🇮 Finnish, 🇫🇷 French, 🇩🇪 German, 🇬🇷 Greek, 🇮🇱 Hebrew, 🇭🇺 Hungarian, 🇮🇹 Italian, 🇯🇵 Japanese, 🇰🇷 Korean, 🇱🇻 Latvian, 🇱🇹 Lithuanian, 🇳🇴 Norwegian, 🇵🇱 Polish, 🇵🇹 Portuguese, 🇷🇴 Romanian, 🇷🇺 Russian, 🇷🇸 Serbian, 🇸🇰 Slovak, 🇸🇮 Slovenian, 🇪🇸 Spanish, 🇸🇪 Swedish, 🇹🇭 Thai, 🇹🇷 Turkish and 🇺🇦 Ukrainian.
+
+### How do I select the keyboard layout?
+
+  If you want to use a keyboard layout or locale that is not the default for your selected language, you can add the `KEYBOARD` and `REGION` variables with a culture code, like this:
+
+  ```yaml
+  environment:
+    REGION: "en-US"
+    KEYBOARD: "en-US"
+  ```
+
+> [!NOTE]  
+>  Changing these values will have no effect after the installation has been performed already. Use the control panel inside Windows in that case.
+>
 
 ### How do I connect using RDP?
 
@@ -324,7 +333,7 @@ kubectl apply -f kubernetes.yml
     - /dev/sdc:/disk2
   ```
 
-  Use `/disk1` if you want it to become your main drive, and use `/disk2` and higher to add them as secondary drives.
+  Use `/disk1` if you want it to become your main drive (which will be formatted during installation), and use `/disk2` and higher to add them as secondary drives (which will stay untouched).
 
 ### How do I pass-through a USB device?
 
@@ -342,24 +351,28 @@ kubectl apply -f kubernetes.yml
 
 ### How do I verify if my system supports KVM?
 
-  To verify that your system supports KVM, run the following commands:
+  Only Linux and Windows 11 support KVM virtualization, macOS and Windows 10 do not unfortunately.
+  
+  You can run the following commands in Linux to check your system:
 
   ```bash
   sudo apt install cpu-checker
   sudo kvm-ok
   ```
 
-  If you receive an error from `kvm-ok` indicating that KVM acceleration can't be used, please check whether:
+  If you receive an error from `kvm-ok` indicating that KVM cannot be used, please check whether:
 
   - the virtualization extensions (`Intel VT-x` or `AMD SVM`) are enabled in your BIOS.
-
-  - you are running an operating system that supports them, like Linux or Windows 11 (macOS and Windows 10 do not unfortunately).
 
   - you enabled "nested virtualization" if you are running the container inside a virtual machine.
 
   - you are not using a cloud provider, as most of them do not allow nested virtualization for their VPS's.
 
-  If you didn't receive any error from `kvm-ok` at all, but the container still complains that `/dev/kvm` is missing, it might help to add `privileged: true` to your compose file (or `--privileged` to your `run` command), to rule out any permission issue.
+  If you do not receive any error from `kvm-ok` but the container still complains about KVM, please check whether:
+
+  - you are not using "Docker Desktop for Linux" as it does not support KVM, instead make use of Docker Engine directly.
+ 
+  - it could help to add `privileged: true` to your compose file (or `sudo` to your `docker run` command), to rule out any permission issue.
 
 ### How do I run macOS in a container?
 
@@ -385,4 +398,4 @@ kubectl apply -f kubernetes.yml
 [Size]: https://img.shields.io/docker/image-size/dockurr/windows/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/dockurr/windows.svg?style=flat&label=pulls&logo=docker
 [Version]: https://img.shields.io/docker/v/dockurr/windows/latest?arch=amd64&sort=semver&color=066da5
-[Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fipitio%2Fghcr-pulls%2Fmaster%2Findex.json&query=%24%5B%3F(%40.owner%3D%3D%22dockur%22%20%26%26%20%40.repo%3D%3D%22windows%22%20%26%26%20%40.image%3D%3D%22windows%22)%5D.pulls&logo=github&style=flat&color=066da5&label=pulls
+[Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2Fdockur%2Fwindows%2Fwindows.json&query=%24.downloads&logo=github&style=flat&color=066da5&label=pulls
